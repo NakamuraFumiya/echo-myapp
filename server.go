@@ -11,10 +11,13 @@ func main() {
 	e := echo.New()
 
 	// Routes
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.GET("/", hello)
 
 	// Start Server
 	e.Logger.Fatal(e.Start(":1323"))
+}
+
+// Handler
+func hello(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello, World!")
 }
