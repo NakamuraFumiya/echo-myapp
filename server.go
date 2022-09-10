@@ -1,7 +1,9 @@
 package main
 
 import (
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -21,6 +23,7 @@ func main() {
 	e.GET("/users/:id", getUser)
 	e.GET("/show", show)
 	e.POST("/save", save)
+	e.POST("/saveimage", saveImage)
 
 	// Start Server
 	e.Logger.Fatal(e.Start(":1323"))
@@ -52,4 +55,36 @@ func save(c echo.Context) error {
 	name := c.FormValue("name")
 	email := c.FormValue("email")
 	return c.String(http.StatusOK, "name:"+name+", email:"+email)
+}
+
+// e.POST("/saveimage", saveImage)
+func saveImage(c echo.Context) error {
+	// Get name
+	name := c.FormValue("name")
+	// Get avatar
+	avatar, err := c.FormFile("avatar")
+	if err != nil {
+		return err
+	}
+
+	// Source
+	src, err := avatar.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	// Destination
+	dst, err := os.Create(avatar.Filename)
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	// Copy
+	if _, err := io.Copy(dst, src); err != nil {
+		return err
+	}
+
+	return c.HTML(http.StatusOK, "<b>Thank you! "+name+"</b>")
 }
