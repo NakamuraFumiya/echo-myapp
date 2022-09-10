@@ -17,6 +17,8 @@ func main() {
 
 	// Routes
 	e.GET("/", hello)
+	// e.POST("/users", saveUser)
+	e.GET("/users/:id", getUser)
 
 	// Start Server
 	e.Logger.Fatal(e.Start(":1323"))
@@ -25,4 +27,8 @@ func main() {
 // Handler
 func hello(c echo.Context) error {
 	return c.String(http.StatusOK, "Hello, World!")
+}
+
+func getUser(c echo.Context) error {
+
 }
