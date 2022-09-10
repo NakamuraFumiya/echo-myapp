@@ -29,6 +29,9 @@ func hello(c echo.Context) error {
 	return c.String(http.StatusOK, "Hello, World!")
 }
 
+// e.GET("/users/:id", getUser)
 func getUser(c echo.Context) error {
-
+	// User ID from path `users/:id
+	id := c.Param("id")
+	return c.String(http.StatusOK, id)
 }
